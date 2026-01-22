@@ -25,8 +25,8 @@ export const authRouter = createTRPCRouter({
       const [newUser] = await ctx.db
         .insert(users)
         .values({
+          id: crypto.randomUUID(),
           email: input.email,
-          password: hashedPassword,
           name: input.name,
         })
         .returning();
@@ -55,7 +55,18 @@ export const authRouter = createTRPCRouter({
         });
       }
 
-      const validPassword = await compare(input.password, user.password);
+      const account = await ctx.db.query.account.findFirst({
+        where: eq(users.id, user.id),
+      });
+
+      if (!account?.password) {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "Email ou senha incorretos",
+        });
+      }
+
+      const validPassword = await compare(input.password, account.password);
 
       if (!validPassword) {
         throw new TRPCError({
