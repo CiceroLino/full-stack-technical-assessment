@@ -10,8 +10,8 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/com
 import { Input } from "@/components/ui/input";
 import { auth } from "@/lib/auth-client";
 import { SignInInput, signInSchema } from "@/lib/validations";
-import { Label } from "@radix-ui/react-dropdown-menu";
 import { toast } from "sonner";
+import { Label } from "@/components/ui/label";
 
 
 export default function SignInPage() {
