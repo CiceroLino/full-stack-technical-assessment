@@ -1,4 +1,12 @@
-import { pgTableCreator, text, varchar, timestamp, pgEnum, boolean } from "drizzle-orm/pg-core";
+import {
+  pgTableCreator,
+  text,
+  varchar,
+  timestamp,
+  pgEnum,
+  boolean,
+  index
+} from "drizzle-orm/pg-core";
 
 export const createTable = pgTableCreator((name) => `t3_tasks_${name}`);
 
@@ -23,7 +31,10 @@ export const session = createTable("session", {
   userId: text("userId")
     .notNull()
     .references(() => user.id, { onDelete: "cascade" }),
-});
+}, (table) => ({
+  userIdIdx: index("session_user_id_idx").on(table.userId),
+  tokenIdx: index("session_token_idx").on(table.token),
+}));
 
 export const account = createTable("account", {
   id: text("id").primaryKey(),
@@ -41,7 +52,9 @@ export const account = createTable("account", {
   password: text("password"),
   createdAt: timestamp("createdAt").notNull().defaultNow(),
   updatedAt: timestamp("updatedAt").notNull().defaultNow(),
-});
+}, (table) => ({
+  userIdIdx: index("account_user_id_idx").on(table.userId),
+}));
 
 export const verifications = createTable("verification", {
   id: text("id").primaryKey(),
@@ -51,7 +64,6 @@ export const verifications = createTable("verification", {
   createdAt: timestamp("createdAt").notNull().defaultNow(),
   updatedAt: timestamp("updatedAt").notNull().defaultNow(),
 });
-
 
 export const taskStatusEnum = pgEnum("task_status", ["pending", "in_progress", "completed"]);
 
@@ -65,7 +77,12 @@ export const task = createTable("task", {
     .references(() => user.id, { onDelete: "cascade" }),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().notNull(),
-});
+}, (table) => ({
+  userIdIdx: index("task_user_id_idx").on(table.userId),
+  statusIdx: index("task_status_idx").on(table.status),
+  createdAtIdx: index("task_created_at_idx").on(table.createdAt),
+  userIdCreatedAtIdx: index("task_user_id_created_at_idx").on(table.userId, table.createdAt),
+}));
 
 export type User = typeof user.$inferSelect;
 export type NewUser = typeof user.$inferInsert;
