@@ -1,22 +1,32 @@
 "use client";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DialogHeader } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
-import { CreateTaskInput, createTaskSchema } from "@/lib/validations";
+import { createTaskSchema } from "@/lib/validations";
 import { api } from "@/trpc/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Dialog, DialogContent, DialogTitle } from "@radix-ui/react-dialog";
 import { Label } from "@radix-ui/react-dropdown-menu";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@radix-ui/react-select";
-import { Task } from "better-auth/react";
-import { Plus, Loader2, Badge, Edit, Trash2 } from "lucide-react";
+import { Edit, Trash2, Plus, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { z } from "zod";
 
+type CreateTaskInput = z.input<typeof createTaskSchema>;
+type CreateTaskOutput = z.output<typeof createTaskSchema>;
 
+type Task = {
+  id: string;
+  title: string;
+  description: string | null;
+  status: "pending" | "in_progress" | "completed";
+  createdAt: Date;
+};
 
 export default function TasksPage() {
   const { toast } = useToast();
@@ -100,6 +110,11 @@ export default function TasksPage() {
 
   const editForm = useForm<CreateTaskInput>({
     resolver: zodResolver(createTaskSchema),
+    defaultValues: {
+      title: "",
+      description: "",
+      status: "pending",
+    },
   });
 
   const onCreateSubmit = (data: CreateTaskInput) => {
@@ -211,7 +226,6 @@ export default function TasksPage() {
         </div>
       )}
 
-      {/* Create Dialog */}
       <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
         <DialogContent>
           <DialogHeader>
@@ -219,7 +233,7 @@ export default function TasksPage() {
           </DialogHeader>
           <form onSubmit={createForm.handleSubmit(onCreateSubmit)} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="create-title">Título</Label>
+              <Label>Título</Label>
               <Input
                 id="create-title"
                 placeholder="Digite o título da task"
@@ -233,7 +247,7 @@ export default function TasksPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="create-description">Descrição</Label>
+              <Label>Descrição</Label>
               <textarea
                 id="create-description"
                 placeholder="Descreva sua task (opcional)"
@@ -243,9 +257,9 @@ export default function TasksPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="create-status">Status</Label>
+              <Label>Status</Label>
               <Select
-                value={createForm.watch("status")}
+                value={createForm.watch("status") ?? "pending"}
                 onValueChange={(value) =>
                   createForm.setValue("status", value as "pending" | "in_progress" | "completed")
                 }
@@ -282,7 +296,6 @@ export default function TasksPage() {
         </DialogContent>
       </Dialog>
 
-      {/* Edit Dialog */}
       <Dialog open={isEditOpen} onOpenChange={setIsEditOpen}>
         <DialogContent>
           <DialogHeader>
@@ -290,7 +303,7 @@ export default function TasksPage() {
           </DialogHeader>
           <form onSubmit={editForm.handleSubmit(onEditSubmit)} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="edit-title">Título</Label>
+              <Label>Título</Label>
               <Input
                 id="edit-title"
                 placeholder="Digite o título da task"
@@ -304,7 +317,7 @@ export default function TasksPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="edit-description">Descrição</Label>
+              <Label>Descrição</Label>
               <textarea
                 id="edit-description"
                 placeholder="Descreva sua task (opcional)"
@@ -314,9 +327,9 @@ export default function TasksPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="edit-status">Status</Label>
+              <Label>Status</Label>
               <Select
-                value={editForm.watch("status")}
+                value={editForm.watch("status") ?? "pending"}
                 onValueChange={(value) =>
                   editForm.setValue("status", value as "pending" | "in_progress" | "completed")
                 }
@@ -353,7 +366,6 @@ export default function TasksPage() {
         </DialogContent>
       </Dialog>
 
-      {/* Delete Confirmation Dialog */}
       <Dialog open={isDeleteOpen} onOpenChange={setIsDeleteOpen}>
         <DialogContent>
           <DialogHeader>

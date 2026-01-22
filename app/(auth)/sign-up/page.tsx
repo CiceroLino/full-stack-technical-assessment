@@ -28,11 +28,6 @@ export default function SignUpPage() {
 
   const onSubmit = async (data: SignUpInput) => {
     setIsLoading(true);
-    console.log('Form data being sent:', {
-      email: data.email,
-      password: data.password ? '***' : 'MISSING',
-      name: data.name,
-    });
 
     try {
       const result = await auth.signUp.email({
@@ -40,8 +35,6 @@ export default function SignUpPage() {
         password: data.password,
         name: data.name ?? "",
       });
-
-      console.log('Sign up result:', result); // Add this too
 
       if (result.error) {
         toast({

@@ -2,10 +2,6 @@ import { pgTableCreator, text, varchar, timestamp, pgEnum, boolean } from "drizz
 
 export const createTable = pgTableCreator((name) => `t3_tasks_${name}`);
 
-// ============================================
-// TABELAS OBRIGATÓRIAS DO BETTER AUTH
-// ============================================
-
 export const user = createTable("user", {
   id: text("id").primaryKey(),
   name: varchar("name", { length: 255 }),
@@ -56,9 +52,6 @@ export const verifications = createTable("verification", {
   updatedAt: timestamp("updatedAt").notNull().defaultNow(),
 });
 
-// ============================================
-// SUAS TABELAS CUSTOMIZADAS
-// ============================================
 
 export const taskStatusEnum = pgEnum("task_status", ["pending", "in_progress", "completed"]);
 
@@ -73,10 +66,6 @@ export const task = createTable("task", {
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().notNull(),
 });
-
-// ============================================
-// TYPES
-// ============================================
 
 export type User = typeof user.$inferSelect;
 export type NewUser = typeof user.$inferInsert;

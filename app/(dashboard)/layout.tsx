@@ -8,6 +8,11 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { auth } from "@/lib/auth-client";
 
+type NavigationItem = {
+  name: string;
+  href: "/dashboard" | "/dashboard/tasks" | "/dashboard/users";
+  icon: typeof LayoutDashboard;
+};
 
 export default function DashboardLayout({
   children,
@@ -37,7 +42,7 @@ export default function DashboardLayout({
     }
   };
 
-  const navigation = [
+  const navigation: NavigationItem[] = [
     { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
     { name: "Tasks", href: "/dashboard/tasks", icon: CheckSquare },
     { name: "Usuários", href: "/dashboard/users", icon: Users },
@@ -45,7 +50,6 @@ export default function DashboardLayout({
 
   return (
     <div className="flex h-screen bg-gray-100">
-      {/* Mobile menu button */}
       <div className="fixed left-4 top-4 z-50 lg:hidden">
         <Button
           variant="outline"
@@ -56,18 +60,15 @@ export default function DashboardLayout({
         </Button>
       </div>
 
-      {/* Sidebar */}
       <aside
         className={`fixed inset-y-0 left-0 z-40 w-64 transform bg-white shadow-lg transition-transform duration-200 ease-in-out lg:static lg:translate-x-0 ${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
           }`}
       >
         <div className="flex h-full flex-col">
-          {/* Logo */}
           <div className="flex h-16 items-center justify-center border-b px-6">
             <h1 className="text-xl font-bold text-primary">T3 Tasks</h1>
           </div>
 
-          {/* Navigation */}
           <nav className="flex-1 space-y-1 px-3 py-4">
             {navigation.map((item) => {
               const Icon = item.icon;
@@ -85,7 +86,6 @@ export default function DashboardLayout({
             })}
           </nav>
 
-          {/* User info and logout */}
           <div className="border-t p-4">
             <div className="mb-3 rounded-lg bg-gray-50 p-3">
               <p className="text-sm font-medium text-gray-900">
@@ -105,12 +105,10 @@ export default function DashboardLayout({
         </div>
       </aside>
 
-      {/* Main content */}
       <div className="flex flex-1 flex-col overflow-hidden">
-        {/* Header */}
         <header className="flex h-16 items-center justify-between border-b bg-white px-6 shadow-sm lg:px-8">
           <div className="flex items-center lg:hidden">
-            <div className="w-10" /> {/* Spacer for mobile menu button */}
+            <div className="w-10" />
           </div>
           <h2 className="text-xl font-semibold text-gray-900">
             Bem-vindo, {session?.user?.name ?? "Usuário"}!
@@ -122,11 +120,9 @@ export default function DashboardLayout({
           </div>
         </header>
 
-        {/* Page content */}
         <main className="flex-1 overflow-y-auto p-6 lg:p-8">{children}</main>
       </div>
 
-      {/* Mobile menu overlay */}
       {isMobileMenuOpen && (
         <div
           className="fixed inset-0 z-30 bg-black bg-opacity-50 lg:hidden"

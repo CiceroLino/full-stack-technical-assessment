@@ -1,9 +1,10 @@
 "use client";
 
+import { Badge } from "@/components/ui/badge";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { auth } from "@/lib/auth-client";
 import { api } from "@/trpc/react";
-import { Badge, CheckSquare, Clock, ListTodo, Loader2 } from "lucide-react";
+import { CheckSquare, Clock, ListTodo, Loader2 } from "lucide-react";
 
 export default function DashboardPage() {
   const { data: session } = auth.useSession();
@@ -47,7 +48,6 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-8">
-      {/* Welcome Card */}
       <Card>
         <CardHeader>
           <CardTitle className="text-2xl">
@@ -62,7 +62,6 @@ export default function DashboardPage() {
         </CardContent>
       </Card>
 
-      {/* Stats Grid */}
       <div className="grid gap-6 md:grid-cols-3">
         {statsLoading ? (
           <div className="col-span-3 flex justify-center py-12">
@@ -92,7 +91,6 @@ export default function DashboardPage() {
         )}
       </div>
 
-      {/* Recent Tasks */}
       <Card>
         <CardHeader>
           <CardTitle>Tasks Recentes</CardTitle>

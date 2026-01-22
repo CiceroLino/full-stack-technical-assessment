@@ -1,6 +1,5 @@
 import { z } from "zod";
 
-// Auth validations
 export const signUpSchema = z.object({
   email: z.string().email("Email inválido"),
   password: z
@@ -21,7 +20,6 @@ export const signInSchema = z.object({
   password: z.string().min(1, "Senha é obrigatória"),
 });
 
-// Task validations
 export const createTaskSchema = z.object({
   title: z.string().min(3, "O título deve ter no mínimo 3 caracteres"),
   description: z.string().optional(),

@@ -9,7 +9,7 @@ export const authRouter = createTRPCRouter({
   signUp: publicProcedure
     .input(signUpSchema)
     .mutation(async ({ ctx, input }) => {
-      const existingUser = await ctx.db.query.users.findFirst({
+      const existingUser = await ctx.db.query.user.findFirst({
         where: eq(users.email, input.email),
       });
 
@@ -44,7 +44,7 @@ export const authRouter = createTRPCRouter({
   signIn: publicProcedure
     .input(signInSchema)
     .mutation(async ({ ctx, input }) => {
-      const user = await ctx.db.query.users.findFirst({
+      const user = await ctx.db.query.user.findFirst({
         where: eq(users.email, input.email),
       });
 
