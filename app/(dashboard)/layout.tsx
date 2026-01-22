@@ -5,8 +5,8 @@ import Link from "next/link";
 import { useState } from "react";
 import { LayoutDashboard, CheckSquare, Users, LogOut, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useToast } from "@/hooks/use-toast";
 import { auth } from "@/lib/auth-client";
+import { toast } from "sonner";
 
 type NavigationItem = {
   name: string;
@@ -20,25 +20,17 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const router = useRouter();
-  const { toast } = useToast();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { data: session } = auth.useSession();
 
   const handleLogout = async () => {
     try {
       await auth.signOut();
-      toast({
-        title: "Logout realizado",
-        description: "Até logo!",
-      });
+      toast.success("Logout realizado com sucesso!");
       router.push("/sign-in");
       router.refresh();
     } catch (error) {
-      toast({
-        variant: "destructive",
-        title: "Erro ao fazer logout",
-        description: "Tente novamente.",
-      });
+      toast.error("Erro ao fazer logout");
     }
   };
 

@@ -8,15 +8,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { useToast } from "@/hooks/use-toast";
 import { auth } from "@/lib/auth-client";
 import { SignInInput, signInSchema } from "@/lib/validations";
 import { Label } from "@radix-ui/react-dropdown-menu";
+import { toast } from "sonner";
 
 
 export default function SignInPage() {
   const router = useRouter();
-  const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
 
   const {
@@ -36,21 +35,14 @@ export default function SignInPage() {
         password: data.password,
       });
 
-      toast({
-        title: "Login realizado com sucesso!",
-        description: "Redirecionando para o dashboard...",
-      });
+      toast.success("Login realizado com sucesso!");
 
       router.push("/dashboard");
       router.refresh();
 
       return;
     } catch (error) {
-      toast({
-        variant: "destructive",
-        title: "Erro ao fazer login",
-        description: "Email ou senha incorretos.",
-      });
+      toast.error("Email ou senha incorretos");
 
       setIsLoading(false);
     }

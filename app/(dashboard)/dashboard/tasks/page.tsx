@@ -3,15 +3,14 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { DialogHeader } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { useToast } from "@/hooks/use-toast";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { createTaskSchema } from "@/lib/validations";
 import { api } from "@/trpc/react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Dialog, DialogContent, DialogTitle } from "@radix-ui/react-dialog";
-import { Label } from "@radix-ui/react-dropdown-menu";
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@radix-ui/react-select";
+import { toast } from "sonner";
 import { Edit, Trash2, Plus, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -29,7 +28,6 @@ type Task = {
 };
 
 export default function TasksPage() {
-  const { toast } = useToast();
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
@@ -42,19 +40,12 @@ export default function TasksPage() {
     onSuccess: () => {
       utils.tasks.list.invalidate();
       utils.tasks.getStats.invalidate();
-      toast({
-        title: "Task criada!",
-        description: "Sua task foi criada com sucesso.",
-      });
+      toast.success("Task criada!");
       setIsCreateOpen(false);
       createForm.reset();
     },
     onError: (error) => {
-      toast({
-        variant: "destructive",
-        title: "Erro ao criar task",
-        description: error.message,
-      });
+      toast.error("Erro ao criar task");
     },
   });
 
@@ -62,20 +53,13 @@ export default function TasksPage() {
     onSuccess: () => {
       utils.tasks.list.invalidate();
       utils.tasks.getStats.invalidate();
-      toast({
-        title: "Task atualizada!",
-        description: "Suas alterações foram salvas.",
-      });
+      toast.success("Task atualizada com sucesso!");
       setIsEditOpen(false);
       setSelectedTask(null);
       editForm.reset();
     },
     onError: (error) => {
-      toast({
-        variant: "destructive",
-        title: "Erro ao atualizar task",
-        description: error.message,
-      });
+      toast.error(error.message || "Erro ao atualizar task");
     },
   });
 
@@ -83,19 +67,12 @@ export default function TasksPage() {
     onSuccess: () => {
       utils.tasks.list.invalidate();
       utils.tasks.getStats.invalidate();
-      toast({
-        title: "Task excluída!",
-        description: "A task foi removida com sucesso.",
-      });
+      toast.success("Task excluída com sucesso!");
       setIsDeleteOpen(false);
       setSelectedTask(null);
     },
     onError: (error) => {
-      toast({
-        variant: "destructive",
-        title: "Erro ao excluir task",
-        description: error.message,
-      });
+      toast.error(error.message || "Erro ao excluir task");
     },
   });
 

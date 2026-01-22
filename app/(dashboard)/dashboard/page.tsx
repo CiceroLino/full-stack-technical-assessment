@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { auth } from "@/lib/auth-client";
 import { api } from "@/trpc/react";
-import { CheckSquare, Clock, ListTodo, Loader2 } from "lucide-react";
+import { ListTodo, CheckSquare, Clock, Loader2 } from "lucide-react";
 
 export default function DashboardPage() {
   const { data: session } = auth.useSession();
