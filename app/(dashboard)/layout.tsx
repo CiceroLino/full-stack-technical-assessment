@@ -30,7 +30,8 @@ export default function DashboardLayout({
       router.push("/sign-in");
       router.refresh();
     } catch (error) {
-      toast.error("Erro ao fazer logout");
+      const errorMessage = error instanceof Error ? error.message : "Erro ao fazer logout";
+      toast.error(errorMessage);
     }
   };
 

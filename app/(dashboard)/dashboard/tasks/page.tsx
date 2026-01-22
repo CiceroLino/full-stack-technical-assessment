@@ -17,7 +17,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 type CreateTaskInput = z.input<typeof createTaskSchema>;
-type CreateTaskOutput = z.output<typeof createTaskSchema>;
+// type CreateTaskOutput = z.output<typeof createTaskSchema>;
 
 type Task = {
   id: string;
@@ -45,7 +45,8 @@ export default function TasksPage() {
       createForm.reset();
     },
     onError: (error) => {
-      toast.error("Erro ao criar task");
+      const errorMessage = error instanceof Error ? error.message : "Erro ao criar task";
+      toast.error(errorMessage);
     },
   });
 
@@ -72,7 +73,8 @@ export default function TasksPage() {
       setSelectedTask(null);
     },
     onError: (error) => {
-      toast.error(error.message || "Erro ao excluir task");
+      const errorMessage = error instanceof Error ? error.message : "Erro ao excluir task";
+      toast.error(errorMessage);
     },
   });
 
@@ -349,7 +351,7 @@ export default function TasksPage() {
             <DialogTitle>Confirmar Exclusão</DialogTitle>
           </DialogHeader>
           <p className="text-sm text-gray-600">
-            Tem certeza que deseja excluir a task "{selectedTask?.title}"? Esta ação não pode ser desfeita.
+            Tem certeza que deseja excluir a task &quot;{selectedTask?.title}&quot;? Esta ação não pode ser desfeita.
           </p>
           <div className="flex gap-2">
             <Button

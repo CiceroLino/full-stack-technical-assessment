@@ -1,7 +1,7 @@
 import { signUpSchema, signInSchema } from "@/lib/validations";
 import { user as users } from "@/server/db/schema";
 import { TRPCError } from "@trpc/server";
-import { hash, compare } from "bcryptjs";
+import { compare } from "bcryptjs";
 import { eq } from "drizzle-orm";
 import { createTRPCRouter, publicProcedure, protectedProcedure } from "../trpc";
 
@@ -20,7 +20,7 @@ export const authRouter = createTRPCRouter({
         });
       }
 
-      const hashedPassword = await hash(input.password, 10);
+      // const hashedPassword = await hash(input.password, 10);
 
       const [newUser] = await ctx.db
         .insert(users)

@@ -42,8 +42,8 @@ export default function SignInPage() {
 
       return;
     } catch (error) {
-      toast.error("Email ou senha incorretos");
-
+      const errorMessage = error instanceof Error ? error.message : "Email ou senha incorretos";
+      toast.error(errorMessage);
       setIsLoading(false);
     }
   };
